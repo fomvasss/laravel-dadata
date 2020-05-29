@@ -1,6 +1,3 @@
 {
-    "name": "fomvasss/laravel-dadata",
-    "require": {
-        "fomvasss/laravel-dadata": "master"
-    }
+    "name": "danilano/laravel-dadata"
 }
