@@ -1,43 +1,6 @@
 {
     "name": "fomvasss/laravel-dadata",
-    "description": "Dadata API client (https://dadata.ru)",
-    "keywords": ["laravel", "dadata", "autocomplete"],
-    "type": "package",
-    "license": "MIT",
-    "authors": [
-        {
-            "role": "Company",
-            "name": "WebWest"
-        },
-        {
-            "role": "Developer",
-            "name": "Fomin Vasyl",
-            "email": "fomvasss@gmail.com"
-        }
-    ],
     "require": {
-        "php": ">=5.5.0",
-        "ext-json": "*",
-        "ext-curl": "*",
-        "guzzlehttp/guzzle": ">=6.2.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "Fomvasss\\Dadata\\": "src"
-        },
-        "files": [
-            "src/helpers.php"
-        ]
-    },
-    "extra": {
-        "laravel":{
-            "providers": [
-                "Fomvasss\\Dadata\\DadataServiceProvider"
-            ],
-            "aliases": {
-                "DadataSuggest": "Fomvasss\\Dadata\\Facades\\DadataSuggest",
-                "DadataClean": "Fomvasss\\Dadata\\Facades\\DadataClean"
-            }
-        }
+        "fomvasss/laravel-dadata": "master"
     }
 }
