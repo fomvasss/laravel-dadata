@@ -179,15 +179,15 @@ class ClientSuggest
      */
     private function query($url, array $params = [], $method = self::METHOD_POST)
     {
-        if (empty($params['query'])) {
-            throw new RuntimeException('Empty request');
+        if (empty($params['count'])) {
+            $params['count'] = 1;
         }
 
         $request = new Request($method, $url, [
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
             'Authorization' => 'Token ' . $this->token
-        ], 0 < count($params) ? json_encode($params) : null);
+        ], json_encode($params));
 
         try {
             $response = $this->httpClient->send($request, $this->httpOptions);
@@ -240,7 +240,6 @@ class ClientSuggest
             default:
                 throw new RuntimeException('Unexpected error');
         }
-
     }
 
     /**
@@ -248,16 +247,23 @@ class ClientSuggest
      *
      * @link https://dadata.ru/api/suggest/
      * @param string $type
-     * @param array $fields
+     * @param string $query
+     * @param array $params
      * @return bool|mixed|string
      */
-    public function suggest($type, $fields)
+    public function suggest($type, $query, array $params)
     {
-        return $this->request("{$this->url_suggestions}/$type", $fields);
+        $params['query'] = $query;
+        return $this->request("{$this->url_suggestions}/$type", $params);
     }
 
-    public function request($suggestUrl, $fields)
+    public function geoSuggest(array $query)
     {
-        return $this->query("{$this->base_url}/{$this->version}/rs/$suggestUrl", $fields);
+        return $this->request('geolocate/' . static::TYPE_ADDRESS, $query);
+    }
+
+    public function request($suggestUrl, $query)
+    {
+        return $this->query("{$this->base_url}/{$this->version}/rs/$suggestUrl", $query);
     }
 }
