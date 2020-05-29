@@ -1,3 +1,11 @@
 {
-    "name": "danilano/laravel-dadata"
+    "name": "danilano/laravel-dadata",
+    "autoload": {
+        "psr-4": {
+            "Fomvasss\\Dadata\\": "src"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    }
 }
