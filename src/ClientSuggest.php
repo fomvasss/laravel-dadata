@@ -109,7 +109,7 @@ class ClientSuggest
      *
      * @var string
      */
-    protected $version = '4_1';
+    protected $version;
 
     /**
      * Базовый адрес
@@ -123,14 +123,14 @@ class ClientSuggest
      *
      * @var string
      */
-    protected $url_suggestions = 'rs/suggest';
+    protected $url_suggestions = 'suggest';
 
     /**
      * URI поиска организации по ИНН, ОГРН, HID
      *
      * @var string
      */
-    protected $url_findById = 'rs/findById/party';
+    protected $url_findById = 'findById/party';
 
     /**
      * @var ClientInterface
@@ -149,6 +149,8 @@ class ClientSuggest
     {
         $this->config = config('dadata');
         $this->token = $this->config['token'];
+        $this->version = $this->config['version'];
+
         $this->httpClient = new Client();
     }
 
@@ -156,28 +158,27 @@ class ClientSuggest
      * Организация по ИНН или ОГРН
      *
      * @link https://dadata.ru/api/find-party/
-     * @param string $id     ИНН, ОГРН, Dadata HID
-     * @param array  $params Дополнительные параметры
+     * @param string $id ИНН, ОГРН, Dadata HID
+     * @param array $params Дополнительные параметры
      * @return mixed
      */
     public function partyById($id, array $params = [])
     {
         $params['query'] = $id;
 
-        return $this->query("{$this->base_url}/{$this->version}/{$this->url_findById}", $params);
+        return $this->request("{$this->url_findById}", $params);
     }
 
     /**
      * Requests API.
      *
      * @param string $url
-     * @param array  $params
+     * @param array $params
      * @param string $method
      * @return mixed
      */
     private function query($url, array $params = [], $method = self::METHOD_POST)
     {
-
         if (empty($params['query'])) {
             throw new RuntimeException('Empty request');
         }
@@ -209,7 +210,7 @@ class ClientSuggest
                     throw new RuntimeException('Empty result');
                 }
 
-                return count($result['suggestions']) === 1 ? $result['suggestions'][0] : $result['suggestions'];
+                return (int)$params['count'] === 1 ? $result['suggestions'][0] : $result['suggestions'];
 
                 break;
             case 400:
@@ -247,13 +248,16 @@ class ClientSuggest
      *
      * @link https://dadata.ru/api/suggest/
      * @param string $type
-     * @param array  $fields
+     * @param array $fields
      * @return bool|mixed|string
      */
     public function suggest($type, $fields)
     {
-        return $this->query("{$this->base_url}/{$this->version}/{$this->url_suggestions}/$type", $fields);
+        return $this->request("{$this->url_suggestions}/$type", $fields);
     }
 
-
+    public function request($suggestUrl, $fields)
+    {
+        return $this->query("{$this->base_url}/{$this->version}/rs/$suggestUrl", $fields);
+    }
 }
