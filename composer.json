@@ -1,3 +1,26 @@
 {
-    "name": "danilano/laravel-dadata"
+    "name": "danilano/laravel-dadata",
+    "autoload": {
+        "psr-4": {
+            "Fomvasss\\Dadata\\": "src"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "require": {
+        "php": "^7.1.3",
+        "guzzlehttp/guzzle": "^6.5"
+    },
+    "extra": {
+        "laravel":{
+            "providers": [
+                "Fomvasss\\Dadata\\DadataServiceProvider"
+            ],
+            "aliases": {
+                "DadataSuggest": "Fomvasss\\Dadata\\Facades\\DadataSuggest",
+                "DadataClean": "Fomvasss\\Dadata\\Facades\\DadataClean"
+            }
+        }
+    }
 }
